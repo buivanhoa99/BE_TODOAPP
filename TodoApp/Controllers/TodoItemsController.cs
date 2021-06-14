@@ -28,6 +28,14 @@ namespace TodoApp.Controllers
             return await _context.TodoItems.ToListAsync();
         }
 
+        [HttpPatch("status/")]
+        public async Task<IActionResult> UpdateItemStatus(TodoItem todoItem)
+        {
+            _context.Entry(todoItem).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoItem>> GetTodoItem(int id)
@@ -48,7 +56,7 @@ namespace TodoApp.Controllers
         public async Task<IActionResult> PutTodoItem(int id, TodoItem todoItem)
         {
             if (id != todoItem.Id)
-            {
+            {   
                 return BadRequest();
             }
 
@@ -83,6 +91,7 @@ namespace TodoApp.Controllers
 
             return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
         }
+
 
         // DELETE: api/TodoItems/5
         [HttpDelete("{id}")]
